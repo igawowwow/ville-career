@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [claude/reference-image-app-46a99l, main]
+    branches: [claude/ville-career-site-mwwxhg, main]
   workflow_dispatch:
 
 permissions:

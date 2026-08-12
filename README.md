@@ -22,6 +22,16 @@ React + TypeScript + Vite 製のシングルページサイトとして動作し
 6. **05 HOW IT WORKS** — ご紹介から、入社まで。
 7. **CLOSING / FOOTER** — 株式会社ヴィレ
 
+## 公開(デプロイ)
+
+`claude/ville-career-site-mwwxhg`(または `main`)へのpushで GitHub Actions がビルドし、
+`gh-pages` ブランチ経由で GitHub Pages に公開されます。
+
+- 公開ドメイン: **https://career.ville-ville.com/**(`public/CNAME` で指定)
+- `public/CNAME` が存在するとビルドのベースパスは `/`、削除すると `/calcio/`(プロジェクトページ用)に自動で切り替わります(`vite.config.ts`)
+- DNS側では `career.ville-ville.com` の CNAME レコードを `igawowwow.github.io` に向けてください
+- 本体サイト(STUDIO等)が同じドメインの apex / www を使っていても、サブドメインのレコード追加だけで共存できます
+
 ## 応募フォームURLの設定
 
 CTAボタンのリンク先は `src/App.tsx` 冒頭の `APPLY_URL` 定数です。
