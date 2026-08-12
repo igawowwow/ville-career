@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 const APPLY_URL = '#apply'
 
 // FormSubmit経由で応募内容をメール通知する(初回送信時に有効化メールが届く)
-const FORM_ENDPOINT = 'https://formsubmit.co/iga.hikaru@ville-ville.com'
+const FORM_ENDPOINT = 'https://formsubmit.co/9a619cba29ce9aaae2fb88526033f002'
 const SITE_URL = 'https://career.ville-ville.com'
 
 const WISH_OPTIONS = [
