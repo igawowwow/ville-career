@@ -1,24 +1,31 @@
-# Calcio ⚽
+# VILLE CAREER
 
-参考画像をもとに実装した、サッカー(フットボール)プレイヤー向けモバイルアプリの UI です。
-React + TypeScript + Vite 製のモバイルファーストな SPA として動作します。
+未経験から、今よりいい条件へ。
 
-## 画面
+原則紹介制の就職・転職支援サービス「VILLE CAREER」のランディングページです。
+React + TypeScript + Vite 製のシングルページサイトとして動作します。
 
-- **Profile(プロフィール)**
-  - ヘッダー:ウォレット残高(€0.00 / チャージボタン)、ユーザー名、通知・設定アイコン
-  - Weekly streak:現在 / 最高ストリーク、今週のカレンダー(今日をハイライト)、「Find events」バナー
-  - Achievements:実績バッジ(Drafted / Match Ready / Official Player / Title Winner)を横スクロール表示
-  - Frequent players:一緒にプレイした選手の空状態表示
-  - Received compliments:もらった称賛の空状態表示
-  - Milestones:試合数マイルストーンバッジ(10 / 25 / 50 / 100 / 200)と「Find games」バナー
-- **Edit profile(プロフィール編集)**
-  - プロフィール写真(月 1 回のみ変更可の注意書き)
-  - Bio、Basic Info(性別・生年月日・国籍・職業・居住地・言語・興味)
-  - Football(スキルレベル・ポジション・チーム・憧れの選手・モチベーション)
-  - 各項目はボトムシートで入力でき、`localStorage` に保存されます
-  - 全項目を入力すると「Match Ready」実績が解除されます
-- **Explore / Fields / Messages**:プレースホルダー画面
+## デザイン
+
+- 黒 × アシッドイエロー1色のエディトリアル・ブルータリズム
+- 明朝(Shippori Mincho B1)の巨大タイポグラフィ × モノスペースの英字ラベル
+- 粒子ノイズ、マーキー、スクロール連動のリビール演出
+- `prefers-reduced-motion` 対応、モバイルファーストのレスポンシブ
+
+## セクション構成
+
+1. **HERO** — 未経験から、今よりいい条件へ。
+2. **01 INVITATION ONLY** — 原則、ご紹介の方のみ。
+3. **02 BETTER LIFE** — 転職するなら、生活を良くしよう。
+4. **03 GOOD CONDITIONS** — 未経験でも、条件は妥協しない。
+5. **04 SIMPLE** — 大事なことを、わかりやすく。
+6. **05 HOW IT WORKS** — ご紹介から、入社まで。
+7. **CLOSING / FOOTER** — 株式会社ヴィレ
+
+## 応募フォームURLの設定
+
+CTAボタンのリンク先は `src/App.tsx` 冒頭の `APPLY_URL` 定数です。
+運用開始時に専用フォームのURLへ差し替えてください。
 
 ## 開発
 
