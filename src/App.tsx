@@ -55,6 +55,10 @@ const COMPANY_POINTS = [
     d: '広告費をかけて母集団を「買う」採用ではありません。ムダな媒体コストがない分、1名あたりの採用単価を抑えられます。',
   },
   {
+    t: '人となりまで、分かって紹介',
+    d: '紹介ベースだから、経歴だけでなく人となりを知ったうえでご紹介できます。マッチング精度が高く、貴社に本当に合う方を選べます。',
+  },
+  {
     t: '紹介経由だから、辞めにくい',
     d: '友人・知人の顔を立てて入社する人材です。ミスマッチや早期離職のリスクを抑え、定着につながります。',
   },
@@ -259,13 +263,19 @@ function SeekerPage() {
           <div className="chat">
             {CHAT.map((m, i) => (
               <Reveal key={i} delay={i * 90} className={`chat__row chat__row--${m.who}`}>
-                <span className="chat__who" aria-hidden="true">
-                  {m.who === 'friend' ? '👦' : m.who === 'you' ? '🙂' : '🧑‍💻'}
-                </span>
+                <img
+                  className="chat__who"
+                  src={m.who === 'friend' ? '/img/avatar-friend.jpg' : m.who === 'you' ? '/img/avatar-you.jpg' : '/img/avatar-staff.jpg'}
+                  alt=""
+                  width={44}
+                  height={44}
+                  loading="lazy"
+                />
                 <p className="chat__bubble">{m.text}</p>
               </Reveal>
             ))}
           </div>
+          <p className="chat__note">※写真はイメージです。</p>
           <Reveal delay={200} className="section__cta">
             <ApplyButton />
           </Reveal>

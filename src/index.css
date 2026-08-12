@@ -1184,3 +1184,21 @@ summary:focus-visible {
   color: var(--sun);
   font-weight: 700;
 }
+
+/* チャットのアバター写真 */
+img.chat__who {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 0 var(--ink);
+  flex: none;
+}
+
+.chat__note {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-dim);
+}
