@@ -1,17 +1,17 @@
 /* ============================================================
-   VILLE CAREER — pop redesign
+   VILLE CAREER
+   求職者ページ: ポップ×イラスト調(丸ゴシック/イエロー/マスコット/波)
+   企業様ページ: 信頼系ダーク(明朝/ネイビー)×ポップの名残(角丸・押し影)
    palette:
-     --sun    #FFD84D  brand yellow
-     --paper  #FFF9EC  page background
-     --ink    #26282F  text
-     --coral  #FF6154  apply CTA
-     --sky    #4FA8DE  company accent
-   type: Zen Maru Gothic (display) / Zen Kaku Gothic New (body)
+     --sun    #FFD84D   --paper #FFF9EC   --ink  #26282F
+     --coral  #FF6154   --sky   #4FA8DE   --line #06C755
+     --navy   #1E2430 (企業ヒーロー)
    ============================================================ */
 
 :root {
   --sun: #ffd84d;
   --sun-soft: #ffe98f;
+  --sun-deep: #f5b81c;
   --paper: #fff9ec;
   --ink: #26282f;
   --ink-dim: #6b6d78;
@@ -19,9 +19,12 @@
   --coral-deep: #e8483b;
   --sky: #4fa8de;
   --sky-deep: #2f88c2;
+  --line-green: #06c755;
+  --navy: #1e2430;
   --white: #ffffff;
   --radius: 22px;
   --display: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+  --serif: 'Shippori Mincho B1', 'Hiragino Mincho ProN', serif;
   --body: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
 }
 
@@ -86,8 +89,13 @@ a {
   color: var(--coral);
 }
 
+/* 企業ページ: ダークヒーローの上では白ロゴ */
+.site--company .header:not(.header--solid) .header__logo {
+  color: var(--paper);
+}
+
 .site--company .header__logo span {
-  color: var(--sky-deep);
+  color: var(--sky);
 }
 
 .header__link {
@@ -95,6 +103,7 @@ a {
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
+  color: var(--ink);
   background: var(--white);
   border: 2px solid var(--ink);
   border-radius: 999px;
@@ -108,17 +117,13 @@ a {
   box-shadow: 0 1px 0 var(--ink);
 }
 
-/* ============ hero ============ */
+/* ============ hero (求職者) ============ */
 .hero {
   position: relative;
-  padding: clamp(110px, 18vh, 170px) clamp(20px, 5vw, 48px) clamp(48px, 8vh, 80px);
-  max-width: 860px;
+  padding: clamp(104px, 16vh, 150px) clamp(20px, 5vw, 48px) clamp(48px, 8vh, 76px);
+  max-width: 880px;
   margin: 0 auto;
   text-align: center;
-  background:
-    radial-gradient(circle at 12% 18%, var(--sun-soft) 0 42px, transparent 43px),
-    radial-gradient(circle at 90% 12%, var(--sun) 0 30px, transparent 31px),
-    radial-gradient(circle at 84% 72%, var(--sun-soft) 0 26px, transparent 27px);
 }
 
 .hero__kicker {
@@ -130,11 +135,7 @@ a {
   color: var(--sun);
   border-radius: 999px;
   padding: 6px 18px;
-  margin-bottom: 22px;
-}
-
-.hero__kicker--company {
-  color: #bfe3ff;
+  margin-bottom: 20px;
 }
 
 .hero__title {
@@ -145,14 +146,14 @@ a {
   letter-spacing: 0.01em;
 }
 
+.hero__title > span {
+  display: block;
+}
+
 .hero__title em {
   font-style: normal;
   background: linear-gradient(transparent 62%, var(--sun) 62% 94%, transparent 94%);
   padding: 0 2px;
-}
-
-.em--company {
-  background: linear-gradient(transparent 62%, #bfe3ff 62% 94%, transparent 94%) !important;
 }
 
 .hero__lead {
@@ -160,6 +161,11 @@ a {
   font-size: clamp(15px, 2.4vw, 18px);
   color: var(--ink-dim);
   font-weight: 500;
+}
+
+.hero__lead strong {
+  color: var(--ink);
+  background: linear-gradient(transparent 62%, #b7f0cd 62% 94%, transparent 94%);
 }
 
 .hero__note {
@@ -187,7 +193,9 @@ a {
   padding: 7px 16px;
   box-shadow: 0 3px 0 var(--ink);
   opacity: 0;
-  animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation:
+    pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    floaty 3.6s ease-in-out infinite;
 }
 
 .badge:nth-child(odd) {
@@ -196,6 +204,7 @@ a {
 
 .badge:nth-child(even) {
   rotate: 1.5deg;
+  animation-duration: 0.45s, 4.4s;
 }
 
 @keyframes pop-in {
@@ -209,9 +218,242 @@ a {
   }
 }
 
-/* ============ ticket (3 inputs) ============ */
+@keyframes floaty {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -5px;
+  }
+}
+
+/* 登場アニメーション(ヒーロー) */
+.rise {
+  opacity: 0;
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ マスコット(太陽) ============ */
+.sun-chan {
+  position: relative;
+  width: clamp(84px, 12vw, 112px);
+  aspect-ratio: 1;
+  margin: 0 auto 18px;
+  animation: bob 3.4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: -2deg;
+  }
+  50% {
+    translate: 0 -8px;
+    rotate: 2deg;
+  }
+}
+
+.sun-chan__ring {
+  position: absolute;
+  inset: -13px;
+  border: 3px dashed var(--sun-deep);
+  border-radius: 50%;
+  animation: spin 14s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.sun-chan__face {
+  position: absolute;
+  inset: 0;
+  background: var(--sun);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 0 5px 0 var(--ink);
+}
+
+.sun-chan__eye {
+  position: absolute;
+  top: 38%;
+  width: 9%;
+  aspect-ratio: 1;
+  background: var(--ink);
+  border-radius: 50%;
+  animation: blink 4.5s infinite;
+}
+
+.sun-chan__eye:first-child {
+  left: 30%;
+}
+
+.sun-chan__eye + .sun-chan__eye {
+  right: 30%;
+}
+
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    scale: 1 1;
+  }
+  95% {
+    scale: 1 0.1;
+  }
+}
+
+.sun-chan__cheek {
+  position: absolute;
+  top: 52%;
+  width: 13%;
+  aspect-ratio: 1;
+  background: #ff9d94;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.sun-chan__cheek--l {
+  left: 16%;
+}
+
+.sun-chan__cheek--r {
+  right: 16%;
+}
+
+.sun-chan__smile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% 0;
+  width: 26%;
+  height: 15%;
+  border: 3px solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 100px 100px;
+}
+
+/* ============ 雲・紙吹雪 ============ */
+.cloud {
+  position: absolute;
+  height: 26px;
+  width: 84px;
+  background: var(--white);
+  border-radius: 999px;
+  opacity: 0.9;
+  box-shadow: 22px -10px 0 -4px var(--white), -20px -8px 0 -6px var(--white);
+  animation: drift 30s linear infinite;
+}
+
+.cloud--1 {
+  top: 16%;
+  animation-duration: 34s;
+}
+
+.cloud--2 {
+  top: 30%;
+  animation-duration: 46s;
+  animation-delay: -18s;
+  scale: 0.8;
+}
+
+.cloud--3 {
+  top: 8%;
+  animation-duration: 40s;
+  animation-delay: -30s;
+  scale: 1.2;
+}
+
+@keyframes drift {
+  from {
+    left: -120px;
+  }
+  to {
+    left: 105%;
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: floaty 4s ease-in-out infinite;
+}
+
+.confetti--1 {
+  left: 10%;
+  top: 24%;
+  background: var(--coral);
+}
+
+.confetti--2 {
+  right: 12%;
+  top: 18%;
+  background: var(--sky);
+  animation-delay: -1s;
+}
+
+.confetti--3 {
+  left: 16%;
+  top: 62%;
+  background: var(--sun-deep);
+  animation-delay: -2s;
+}
+
+.confetti--4 {
+  right: 9%;
+  top: 58%;
+  background: var(--line-green);
+  animation-delay: -3s;
+  width: 9px;
+}
+
+/* ============ マーキー ============ */
+.marquee {
+  background: var(--sun);
+  border-block: 3px solid var(--ink);
+  rotate: -1.2deg;
+  scale: 1.02 1;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.marquee__track {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  animation: scroll-x 30s linear infinite;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+}
+
+@keyframes scroll-x {
+  to {
+    translate: -50% 0;
+  }
+}
+
+/* ============ ticket ============ */
 .ticket {
-  margin: 30px auto 26px;
+  margin: 28px auto 26px;
   max-width: 460px;
   background: var(--white);
   border: 2px solid var(--ink);
@@ -219,6 +461,11 @@ a {
   box-shadow: 0 5px 0 var(--ink);
   padding: 18px 20px 20px;
   rotate: -0.6deg;
+  transition: rotate 0.25s ease;
+}
+
+.ticket:hover {
+  rotate: 0.4deg;
 }
 
 .ticket__head {
@@ -271,7 +518,7 @@ a {
   flex: none;
 }
 
-/* ============ apply button (speech bubble) ============ */
+/* ============ apply button ============ */
 .apply-btn {
   position: relative;
   display: inline-flex;
@@ -287,10 +534,24 @@ a {
   padding: 14px 34px 12px;
   box-shadow: 0 6px 0 var(--ink);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  animation: nudge 5s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  93% {
+    rotate: -1.6deg;
+  }
+  96% {
+    rotate: 1.6deg;
+  }
 }
 
 .apply-btn::after {
-  /* 吹き出しのしっぽ */
   content: '';
   position: absolute;
   bottom: -16px;
@@ -318,27 +579,60 @@ a {
   opacity: 0.92;
 }
 
-.apply-btn--big .apply-btn__label {
-  font-size: clamp(20px, 4vw, 26px);
-}
-
 .apply-btn--big {
   padding: 18px 44px 15px;
 }
 
+.apply-btn--big .apply-btn__label {
+  font-size: clamp(20px, 4vw, 26px);
+}
+
 .apply-btn--company {
   background: var(--sky);
+  animation: none;
 }
 
 .apply-btn--company:hover {
   background: var(--sky-deep);
 }
 
-/* ============ sections ============ */
+/* ============ sections / bands / waves ============ */
 .section {
   max-width: 760px;
   margin: 0 auto;
   padding: clamp(44px, 8vh, 76px) clamp(20px, 5vw, 40px);
+}
+
+.band--white {
+  background: var(--white);
+}
+
+.wave {
+  line-height: 0;
+}
+
+.wave svg {
+  width: 100%;
+  height: clamp(24px, 4vw, 56px);
+  display: block;
+}
+
+.wave--white svg path {
+  fill: var(--white);
+}
+
+.wave--paper svg path {
+  fill: var(--paper);
+}
+
+/* 波は上端で白へ导入するため paper 背景の上に描く */
+.band--white .wave--white {
+  background: var(--paper);
+}
+
+.band--white .wave--paper {
+  background: var(--white);
+  rotate: 180deg;
 }
 
 .section__title {
@@ -367,10 +661,10 @@ a {
 
 .section__cta {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 44px;
 }
 
-/* ============ chat flow ============ */
+/* ============ chat ============ */
 .section--chat {
   max-width: 620px;
 }
@@ -410,11 +704,59 @@ a {
 }
 
 .chat__row--you .chat__bubble {
-  background: var(--sun-soft);
+  background: #d9f7e4;
 }
 
 .chat__row--staff .chat__bubble {
-  background: #ffe3df;
+  background: var(--sun-soft);
+}
+
+.chat .reveal {
+  transform: translateY(14px) scale(0.94);
+}
+
+.chat .reveal.is-in {
+  transform: none;
+}
+
+/* ============ promise ============ */
+.promise {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.promise__card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 0 var(--ink);
+  padding: 22px 20px;
+  text-align: center;
+  transition: translate 0.2s ease, box-shadow 0.2s ease;
+}
+
+.promise__card:hover {
+  translate: 0 -4px;
+  box-shadow: 0 8px 0 var(--ink);
+}
+
+.promise__emoji {
+  font-size: 34px;
+}
+
+.promise__title {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 17px;
+  margin-top: 10px;
+}
+
+.promise__desc {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--ink-dim);
 }
 
 /* ============ FAQ ============ */
@@ -426,11 +768,16 @@ a {
 }
 
 .faq__item {
-  background: var(--white);
+  background: var(--paper);
   border: 2px solid var(--ink);
   border-radius: 16px;
   box-shadow: 0 3px 0 var(--ink);
   overflow: hidden;
+  transition: translate 0.15s ease;
+}
+
+.faq__item:hover {
+  translate: 0 -2px;
 }
 
 .faq__q {
@@ -439,7 +786,7 @@ a {
   font-family: var(--display);
   font-weight: 700;
   font-size: 16px;
-  padding: 14px 18px;
+  padding: 14px 44px 14px 18px;
   position: relative;
 }
 
@@ -481,7 +828,7 @@ a {
   font-weight: 900;
 }
 
-/* ============ closing ============ */
+/* ============ closing (求職者) ============ */
 .section--closing {
   text-align: center;
   padding-bottom: clamp(80px, 12vh, 120px);
@@ -506,52 +853,198 @@ a {
   color: var(--ink-dim);
 }
 
-/* ============ company page ============ */
-.hero--company {
-  background:
-    radial-gradient(circle at 12% 18%, #cfe8fa 0 42px, transparent 43px),
-    radial-gradient(circle at 90% 12%, #a8d4f2 0 30px, transparent 31px),
-    radial-gradient(circle at 84% 72%, #cfe8fa 0 26px, transparent 27px);
-}
-
-.hero--company .apply-btn {
-  margin-top: 30px;
-}
-
-.points {
-  margin-top: 32px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
-}
-
-.points__card {
-  background: var(--white);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 0 var(--ink);
-  padding: 22px 20px;
+/* ============================================================
+   企業様ページ(信頼系)
+   ============================================================ */
+.chero {
+  background: var(--navy);
+  color: var(--paper);
   text-align: center;
+  padding: clamp(130px, 20vh, 190px) clamp(20px, 5vw, 48px) clamp(64px, 10vh, 100px);
 }
 
-.points__emoji {
-  font-size: 34px;
+.chero__kicker {
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--sky);
+  margin-bottom: 26px;
 }
 
-.points__title {
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: 17px;
-  margin-top: 10px;
+.chero__title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(34px, 6.4vw, 60px);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
 }
 
-.points__desc {
+.chero__title em {
+  font-style: normal;
+  background: linear-gradient(transparent 70%, rgba(255, 216, 77, 0.45) 70% 96%, transparent 96%);
+}
+
+.chero__lead {
+  margin: 22px auto 0;
+  max-width: 640px;
+  font-size: clamp(14px, 2.2vw, 16px);
+  color: rgba(255, 249, 236, 0.8);
+}
+
+.chero .apply-btn {
+  margin-top: 36px;
+}
+
+.chero__license {
+  margin-top: 26px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 249, 236, 0.55);
+}
+
+.csection__title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(24px, 4.4vw, 34px);
+  letter-spacing: 0.06em;
+  text-align: center;
+  position: relative;
+  padding-bottom: 18px;
+}
+
+.csection__title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  width: 56px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--sun);
+}
+
+.section--cpoints,
+.section--cflow {
+  max-width: 860px;
+}
+
+.cpoints {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.cpoints__card {
+  background: var(--white);
+  border: 1px solid rgba(38, 40, 47, 0.16);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 rgba(38, 40, 47, 0.9);
+  padding: 26px 22px;
+}
+
+.cpoints__num {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--sky-deep);
+  letter-spacing: 0.14em;
+}
+
+.cpoints__num::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 3px;
+  background: var(--sun);
+  border-radius: 2px;
   margin-top: 8px;
+}
+
+.cpoints__title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 19px;
+  margin-top: 14px;
+  letter-spacing: 0.04em;
+}
+
+.cpoints__desc {
+  margin-top: 10px;
   font-size: 14px;
   color: var(--ink-dim);
 }
 
-/* ============ sticky CTA (mobile) ============ */
+.cflow {
+  list-style: none;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cflow__item + .cflow__item {
+  border-top: 1px solid rgba(38, 40, 47, 0.14);
+}
+
+.cflow__inner {
+  display: flex;
+  gap: 22px;
+  align-items: baseline;
+  padding: 22px 6px;
+}
+
+.cflow__num {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 30px;
+  color: var(--sky-deep);
+  flex: none;
+  width: 54px;
+}
+
+.cflow__title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: 0.06em;
+}
+
+.cflow__desc {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+
+.cclosing {
+  background: var(--navy);
+  color: var(--paper);
+  text-align: center;
+  padding: clamp(64px, 10vh, 100px) clamp(20px, 5vw, 48px);
+}
+
+.cclosing__title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(26px, 5vw, 42px);
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+}
+
+.cclosing__license {
+  margin-top: 28px;
+  font-size: 12px;
+  color: rgba(255, 249, 236, 0.55);
+  letter-spacing: 0.06em;
+}
+
+/* 企業ページはフッターとの境目を消す */
+.site--company .footer {
+  border-top: 1px solid rgba(255, 249, 236, 0.14);
+}
+
+/* ============ sticky CTA (mobile / 求職者のみ) ============ */
 .sticky-cta {
   position: fixed;
   inset: auto 0 0 0;
@@ -588,7 +1081,7 @@ a {
     display: block;
   }
 
-  main {
+  main#top {
     padding-bottom: 74px;
   }
 }
@@ -667,10 +1160,21 @@ summary:focus-visible {
   }
 
   .reveal,
-  .badge {
+  .badge,
+  .rise {
     opacity: 1;
     transform: none;
     animation: none;
     transition: none;
+  }
+
+  .sun-chan,
+  .sun-chan__ring,
+  .sun-chan__eye,
+  .cloud,
+  .confetti,
+  .marquee__track,
+  .apply-btn {
+    animation: none;
   }
 }

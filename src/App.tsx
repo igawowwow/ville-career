@@ -20,10 +20,10 @@ const INPUTS = ['お名前', '電話 or LINE', '紹介者の名前']
 
 const CHAT = [
   { who: 'friend', text: 'いい仕事探してるって言ってたよね？ヴィレキャリア紹介するよ🙌' },
-  { who: 'you', text: 'ほんと？応募めんどくさくない？' },
-  { who: 'friend', text: '入力3つだけ、30秒で終わるよ' },
+  { who: 'you', text: 'ほんと？なんか手続きめんどくさそう…' },
+  { who: 'friend', text: '入力3つだけ、30秒で終わるよ。あとはLINEで話すだけ' },
   { who: 'you', text: 'それならやってみる！' },
-  { who: 'staff', text: 'ご応募ありがとうございます！担当のヴィレキャリアです。ぴったりの求人を探してご連絡しますね📞' },
+  { who: 'staff', text: 'はじめまして！ご紹介ありがとうございます🙌 ここからはLINEで、友だちに相談する感覚で希望を聞かせてください！' },
 ]
 
 const FAQS = [
@@ -37,7 +37,7 @@ const FAQS = [
   },
   {
     q: '応募したらどうなる？',
-    a: '担当者が内容を確認して、折り返しご連絡します。あなたに合いそうな求人をご案内して、応募したい企業が決まれば選考へ進みます。',
+    a: '担当とLINEでつながります。友だちに相談する感覚で希望を聞かせてください。合いそうな求人を探してご案内し、応募したい企業が決まれば選考へ進みます。',
   },
   {
     q: '経験もスキルもないけど大丈夫？',
@@ -49,18 +49,22 @@ const COMPANY_POINTS = [
   {
     t: '紹介ベースの母集団',
     d: '友人・知人の紹介を通じて集まった求職者をご案内します。',
-    e: '🤝',
   },
   {
     t: '若手・未経験層に強い',
     d: '「未経験から条件のいい仕事へ」を軸に、若手層の応募が集まっています。',
-    e: '🌱',
   },
   {
-    t: 'まずは無料相談から',
-    d: '募集職種・人数・時期をお聞かせください。1営業日以内にご連絡します。',
-    e: '💬',
+    t: '許可を受けた職業紹介',
+    d: '厚生労働大臣の許可を受けた有料職業紹介事業として運営しています。',
   },
+]
+
+const COMPANY_FLOW = [
+  { n: '01', t: 'ご相談', d: 'フォームから募集職種・人数・時期をお送りください。1営業日以内にご連絡します。' },
+  { n: '02', t: 'ヒアリング', d: '募集条件と求める人物像を伺い、進め方をご提案します。' },
+  { n: '03', t: 'ご紹介', d: '条件に合う求職者をご紹介します。' },
+  { n: '04', t: '選考・入社', d: '面接日程の調整から入社まで、間に入ってサポートします。' },
 ]
 
 function Reveal({
@@ -95,11 +99,48 @@ function Reveal({
   )
 }
 
+function Wave({ flip = false, tone = 'white' }: { flip?: boolean; tone?: 'white' | 'paper' | 'ink' }) {
+  return (
+    <div className={`wave wave--${tone} ${flip ? 'wave--flip' : ''}`} aria-hidden="true">
+      <svg viewBox="0 0 1440 56" preserveAspectRatio="none">
+        <path d="M0,28 C180,56 360,4 720,22 C1080,40 1260,10 1440,28 L1440,56 L0,56 Z" />
+      </svg>
+    </div>
+  )
+}
+
+function Marquee({ text }: { text: string }) {
+  const row = Array.from({ length: 6 }, () => text).join('')
+  return (
+    <div className="marquee" aria-hidden="true">
+      <div className="marquee__track">
+        <span>{row}</span>
+        <span>{row}</span>
+      </div>
+    </div>
+  )
+}
+
+function SunChan() {
+  return (
+    <div className="sun-chan" aria-hidden="true">
+      <span className="sun-chan__ring" />
+      <span className="sun-chan__face">
+        <span className="sun-chan__eye" />
+        <span className="sun-chan__eye" />
+        <span className="sun-chan__cheek sun-chan__cheek--l" />
+        <span className="sun-chan__cheek sun-chan__cheek--r" />
+        <span className="sun-chan__smile" />
+      </span>
+    </div>
+  )
+}
+
 function ApplyButton({ big = false, label = '30秒でカンタン応募' }: { big?: boolean; label?: string }) {
   return (
     <a className={`apply-btn ${big ? 'apply-btn--big' : ''}`} href={APPLY_FORM_URL} target="_blank" rel="noopener">
       <span className="apply-btn__label">{label}</span>
-      <span className="apply-btn__sub">入力は3つだけ・利用料0円</span>
+      <span className="apply-btn__sub">入力3つだけ・あとはLINEでOK・利用料0円</span>
     </a>
   )
 }
@@ -125,19 +166,34 @@ function SeekerPage() {
       <main id="top">
         {/* ============ HERO ============ */}
         <section className="hero">
-          <p className="hero__kicker">🎫 紹介制の就職・転職サポート</p>
+          <span className="cloud cloud--1" aria-hidden="true" />
+          <span className="cloud cloud--2" aria-hidden="true" />
+          <span className="cloud cloud--3" aria-hidden="true" />
+          <span className="confetti confetti--1" aria-hidden="true" />
+          <span className="confetti confetti--2" aria-hidden="true" />
+          <span className="confetti confetti--3" aria-hidden="true" />
+          <span className="confetti confetti--4" aria-hidden="true" />
+
+          <SunChan />
+
+          <p className="hero__kicker rise" style={{ animationDelay: '100ms' }}>
+            🎫 紹介制の就職・転職サポート
+          </p>
           <h1 className="hero__title">
-            友だちの紹介で、
-            <br />
-            <em>いまよりいい仕事</em>へ。
+            <span className="rise" style={{ animationDelay: '200ms' }}>
+              友だちの紹介で、
+            </span>
+            <span className="rise" style={{ animationDelay: '340ms' }}>
+              <em>いまよりいい仕事</em>へ。
+            </span>
           </h1>
-          <p className="hero__lead">
+          <p className="hero__lead rise" style={{ animationDelay: '480ms' }}>
             経験ゼロでもOK。むずかしい登録もなし。
             <br />
-            紹介を受けたら、あとは30秒で応募するだけ。
+            30秒で応募したら、あとは担当と<strong>LINEでつながるだけ</strong>。
           </p>
 
-          <div className="ticket" role="presentation">
+          <div className="ticket rise" style={{ animationDelay: '600ms' }} role="presentation">
             <p className="ticket__head">入力するのはこの3つだけ</p>
             <ul className="ticket__items">
               {INPUTS.map((t, i) => (
@@ -149,33 +205,44 @@ function SeekerPage() {
             </ul>
           </div>
 
-          <ApplyButton big />
+          <div className="rise" style={{ animationDelay: '720ms' }}>
+            <ApplyButton big />
+          </div>
 
           <ul className="hero__badges" aria-label="取り扱い求人の例">
             {BADGES.map((b, i) => (
-              <li key={b.t} className="badge" style={{ animationDelay: `${300 + i * 90}ms` }}>
+              <li key={b.t} className="badge" style={{ animationDelay: `${850 + i * 90}ms` }}>
                 <span aria-hidden="true">{b.e}</span> {b.t}
               </li>
             ))}
           </ul>
-          <p className="hero__note">※実際の募集条件は求人によって異なります。</p>
+          <p className="hero__note rise" style={{ animationDelay: '1300ms' }}>
+            ※実際の募集条件は求人によって異なります。
+          </p>
         </section>
 
+        <Marquee text="いまよりいい仕事へ ✳ 30秒でカンタン応募 ✳ 利用料0円 ✳ " />
+
         {/* ============ ABOUT ============ */}
-        <section className="section">
-          <Reveal>
-            <h2 className="section__title">
-              <span className="section__title-mark">🤝</span>
-              ヴィレキャリアって？
-            </h2>
-          </Reveal>
-          <Reveal delay={80}>
-            <p className="section__text">
-              誰でも登録できる転職サイトとはちがって、<strong>友だち・知り合いの紹介でつながる</strong>
-              就職・転職サポートです。大量の求人メールは送りません。紹介された一人ひとりに、担当がちゃんと向き合います。
-            </p>
-          </Reveal>
-        </section>
+        <div className="band band--white">
+          <Wave tone="white" />
+          <section className="section">
+            <Reveal>
+              <h2 className="section__title">
+                <span className="section__title-mark">🤝</span>
+                ヴィレキャリアって？
+              </h2>
+            </Reveal>
+            <Reveal delay={80}>
+              <p className="section__text">
+                誰でも登録できる転職サイトとはちがって、<strong>友だち・知り合いの紹介でつながる</strong>
+                就職・転職サポートです。紹介で来てくれたあなたは、いわば「友だちの友だち」。だから適当な求人は出せません。
+                友だちと話すみたいに<strong>LINEで相談しながら</strong>、親身にいい仕事を探します。
+              </p>
+            </Reveal>
+          </section>
+          <Wave tone="paper" />
+        </div>
 
         {/* ============ FLOW (chat) ============ */}
         <section className="section section--chat">
@@ -200,25 +267,54 @@ function SeekerPage() {
           </Reveal>
         </section>
 
-        {/* ============ FAQ ============ */}
+        {/* ============ PROMISE ============ */}
         <section className="section">
           <Reveal>
             <h2 className="section__title">
-              <span className="section__title-mark">❓</span>
-              よくある質問
+              <span className="section__title-mark">🤙</span>
+              友だちだから、裏切らない。
             </h2>
           </Reveal>
-          <div className="faq">
-            {FAQS.map((f, i) => (
-              <Reveal key={f.q} delay={i * 70}>
-                <details className="faq__item">
-                  <summary className="faq__q">{f.q}</summary>
-                  <p className="faq__a">{f.a}</p>
-                </details>
+          <div className="promise">
+            {[
+              { e: '🙅', t: '適当な求人は出さない', d: '友だちの友だちに紹介する仕事だから、条件はちゃんと選びます。' },
+              { e: '💚', t: '相談はぜんぶLINEでOK', d: '電話が苦手でも大丈夫。友だちとやりとりする感覚で相談できます。' },
+              { e: '🔕', t: 'しつこい連絡はしない', d: '大量の求人メールも、営業電話の嵐もありません。' },
+            ].map((c, i) => (
+              <Reveal key={c.t} delay={i * 90} className="promise__card">
+                <span className="promise__emoji" aria-hidden="true">
+                  {c.e}
+                </span>
+                <h3 className="promise__title">{c.t}</h3>
+                <p className="promise__desc">{c.d}</p>
               </Reveal>
             ))}
           </div>
         </section>
+
+        {/* ============ FAQ ============ */}
+        <div className="band band--white">
+          <Wave tone="white" />
+          <section className="section">
+            <Reveal>
+              <h2 className="section__title">
+                <span className="section__title-mark">❓</span>
+                よくある質問
+              </h2>
+            </Reveal>
+            <div className="faq">
+              {FAQS.map((f, i) => (
+                <Reveal key={f.q} delay={i * 70}>
+                  <details className="faq__item">
+                    <summary className="faq__q">{f.q}</summary>
+                    <p className="faq__a">{f.a}</p>
+                  </details>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+          <Wave tone="paper" />
+        </div>
 
         {/* ============ CLOSING ============ */}
         <section className="section section--closing" id="apply">
@@ -233,7 +329,7 @@ function SeekerPage() {
             <ApplyButton big />
           </Reveal>
           <Reveal delay={200}>
-            <p className="closing__note">送信すると、担当者から折り返しご連絡します。</p>
+            <p className="closing__note">送信すると、担当からLINEまたは電話でご連絡します。</p>
           </Reveal>
         </section>
       </main>
@@ -251,50 +347,69 @@ function SeekerPage() {
 function CompanyPage() {
   return (
     <main id="company-top" className="company">
-      <section className="hero hero--company">
-        <p className="hero__kicker hero__kicker--company">🏢 企業様向け</p>
-        <h1 className="hero__title">
-          若手・未経験層の採用、
+      {/* ============ HERO (dark / trust) ============ */}
+      <section className="chero">
+        <p className="chero__kicker">FOR EMPLOYERS｜企業様向け</p>
+        <h1 className="chero__title">
+          採用を、
           <br />
-          <em className="em--company">紹介ベース</em>でお手伝いします。
+          <em>紹介の力</em>で。
         </h1>
-        <p className="hero__lead">
-          ヴィレキャリアは、人から人への紹介でつながる有料職業紹介サービスです。
+        <p className="chero__lead">
+          VILLE CAREERは、人から人への紹介でつながる有料職業紹介サービスです。
           <br />
-          採用のご相談は、フォームから1分で送れます。
+          若手・未経験層の採用を、紹介ベースでご支援します。
         </p>
         <a className="apply-btn apply-btn--big apply-btn--company" href={COMPANY_FORM_URL} target="_blank" rel="noopener">
           <span className="apply-btn__label">採用の相談をする</span>
           <span className="apply-btn__sub">1営業日以内にご連絡します</span>
         </a>
+        <p className="chero__license">{LICENSE}</p>
       </section>
 
-      <section className="section">
+      {/* ============ POINTS ============ */}
+      <section className="section section--cpoints">
         <Reveal>
-          <h2 className="section__title">
-            <span className="section__title-mark">✨</span>
-            ヴィレキャリアの特徴
-          </h2>
+          <h2 className="csection__title">VILLE CAREERの特徴</h2>
         </Reveal>
-        <div className="points">
+        <div className="cpoints">
           {COMPANY_POINTS.map((p, i) => (
-            <Reveal key={p.t} delay={i * 90} className="points__card">
-              <span className="points__emoji" aria-hidden="true">
-                {p.e}
-              </span>
-              <h3 className="points__title">{p.t}</h3>
-              <p className="points__desc">{p.d}</p>
+            <Reveal key={p.t} delay={i * 90} className="cpoints__card">
+              <span className="cpoints__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="cpoints__title">{p.t}</h3>
+              <p className="cpoints__desc">{p.d}</p>
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section className="section section--closing">
+      {/* ============ FLOW ============ */}
+      <section className="section section--cflow">
         <Reveal>
-          <h2 className="closing__title">
-            まずは、
+          <h2 className="csection__title">ご相談から入社まで</h2>
+        </Reveal>
+        <ol className="cflow">
+          {COMPANY_FLOW.map((s, i) => (
+            <li key={s.n} className="cflow__item">
+              <Reveal delay={i * 70} className="cflow__inner">
+                <span className="cflow__num">{s.n}</span>
+                <div>
+                  <h3 className="cflow__title">{s.t}</h3>
+                  <p className="cflow__desc">{s.d}</p>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* ============ CLOSING ============ */}
+      <section className="cclosing">
+        <Reveal>
+          <h2 className="cclosing__title">
+            まずは、お気軽に
             <br />
-            お気軽にご相談ください。
+            ご相談ください。
           </h2>
         </Reveal>
         <Reveal delay={120} className="section__cta">
@@ -304,7 +419,7 @@ function CompanyPage() {
           </a>
         </Reveal>
         <Reveal delay={200}>
-          <p className="closing__note">{LICENSE}</p>
+          <p className="cclosing__license">{LICENSE}</p>
         </Reveal>
       </section>
     </main>
