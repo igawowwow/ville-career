@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
-// 紹介を受けた方専用の応募フォーム(Googleフォーム)
-const APPLY_URL = 'https://docs.google.com/forms/d/1qmHhth7cMt5hQMBtw3VtwpdleOOuxmZ8vw1HUbbneyE/viewform'
+// ページ内の応募フォームセクションへスクロール
+const APPLY_URL = '#apply'
+
+// FormSubmit経由で応募内容をメール通知する(初回送信時に有効化メールが届く)
+const FORM_ENDPOINT = 'https://formsubmit.co/iga.hikaru@ville-ville.com'
+const SITE_URL = 'https://career.ville-ville.com'
+
+const WISH_OPTIONS = [
+  '月収30万円以上',
+  '年間休日120日以上',
+  '正社員',
+  '寮・社宅あり',
+  '未経験OKの仕事',
+]
 
 const BADGES = ['月収30万円以上', '年間休日120日以上', '正社員', '未経験OK']
 
@@ -84,6 +96,118 @@ function Marquee({ text, reverse = false }: { text: string; reverse?: boolean })
         <span>{row}</span>
       </div>
     </div>
+  )
+}
+
+function ApplyForm() {
+  const sent = new URLSearchParams(window.location.search).has('sent')
+  if (sent) {
+    return (
+      <div className="apply__done">
+        <p className="apply__done-mark" aria-hidden="true">
+          ✓
+        </p>
+        <p className="statement statement--big">送信が完了しました。</p>
+        <p className="body body--dim">
+          ご応募ありがとうございます。内容を確認のうえ、担当者よりご連絡します。
+        </p>
+      </div>
+    )
+  }
+  return (
+    <form className="apply__form" action={FORM_ENDPOINT} method="POST">
+      <input type="hidden" name="_subject" value="【VILLE CAREER】新しい応募が届きました" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_next" value={`${SITE_URL}/?sent=1#apply`} />
+      <input type="text" name="_honey" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+      <div className="apply__grid">
+        <label className="field">
+          <span className="field__label">
+            お名前<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="text" name="お名前" required autoComplete="name" />
+        </label>
+        <label className="field">
+          <span className="field__label">
+            フリガナ<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="text" name="フリガナ" required />
+        </label>
+        <label className="field">
+          <span className="field__label">
+            電話番号<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="tel" name="電話番号" required autoComplete="tel" />
+        </label>
+        <label className="field">
+          <span className="field__label">
+            メールアドレス<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="email" name="メールアドレス" required autoComplete="email" />
+        </label>
+        <label className="field">
+          <span className="field__label">
+            生年月日<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="text" name="生年月日" placeholder="例:1998年4月1日" required />
+        </label>
+        <label className="field">
+          <span className="field__label">
+            お住まいの都道府県<em className="field__req">必須</em>
+          </span>
+          <input className="field__input" type="text" name="お住まいの都道府県" required />
+        </label>
+        <label className="field field--wide">
+          <span className="field__label">
+            紹介者のお名前<em className="field__req">必須</em>
+          </span>
+          <input
+            className="field__input"
+            type="text"
+            name="紹介者のお名前"
+            placeholder="どなたからのご紹介ですか?"
+            required
+          />
+        </label>
+        <fieldset className="field field--wide apply__fieldset">
+          <legend className="field__label">
+            現在の状況<em className="field__req">必須</em>
+          </legend>
+          <div className="apply__chips">
+            {['在職中', '離職中', '学生'].map((s) => (
+              <label key={s} className="chip">
+                <input type="radio" name="現在の状況" value={s} required />
+                <span>{s}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <fieldset className="field field--wide apply__fieldset">
+          <legend className="field__label">希望する条件(複数選択可)</legend>
+          <div className="apply__chips">
+            {WISH_OPTIONS.map((w) => (
+              <label key={w} className="chip">
+                <input type="checkbox" name="希望する条件" value={w} />
+                <span>{w}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <label className="field field--wide">
+          <span className="field__label">質問・伝えたいこと</span>
+          <textarea className="field__input field__input--area" name="質問・伝えたいこと" rows={4} />
+        </label>
+      </div>
+
+      <button className="btn btn--accent btn--big apply__submit" type="submit">
+        この内容で応募する
+        <span className="btn__arrow" aria-hidden="true">
+          →
+        </span>
+      </button>
+      <p className="body body--dim apply__note">求職者の利用料は0円です。送信後、担当者よりご連絡します。</p>
+    </form>
   )
 }
 
@@ -367,6 +491,24 @@ export default function App() {
                 →
               </span>
             </a>
+          </Reveal>
+        </section>
+
+        {/* ============ APPLY ============ */}
+        <section className="section section--apply" id="apply">
+          <SectionTag num="06" en="APPLY" />
+          <Reveal>
+            <h2 className="section__title">
+              紹介を受けて、
+              <br />
+              応募する。
+            </h2>
+            <p className="body">
+              ご紹介を受けた方専用の応募フォームです。入力内容を確認のうえ、担当者よりご連絡します。
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <ApplyForm />
           </Reveal>
         </section>
       </main>
