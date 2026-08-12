@@ -108,7 +108,7 @@ function Footer() {
   return (
     <footer className="footer">
       <p className="footer__brand">VILLE CAREER（ヴィレキャリア）</p>
-      <p className="footer__line">運営：株式会社ヴィレ｜代表取締役 伊賀 輝</p>
+      <p className="footer__line">運営：株式会社ヴィレ</p>
       <p className="footer__line footer__line--license">{LICENSE}</p>
       <nav className="footer__nav">
         <a href="#top">求職者の方はこちら</a>
