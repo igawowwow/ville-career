@@ -47,16 +47,20 @@ const FAQS = [
 
 const COMPANY_POINTS = [
   {
-    t: '紹介ベースの母集団',
-    d: '友人・知人の紹介を通じて集まった求職者をご案内します。',
+    t: '完全成功報酬・初期費用0円',
+    d: '採用が決まるまで、費用は一切かかりません。掲載料も月額費用もゼロ。リスクなしで始められます。',
   },
   {
-    t: '若手・未経験層に強い',
-    d: '「未経験から条件のいい仕事へ」を軸に、若手層の応募が集まっています。',
+    t: '採用単価を、大きく抑える',
+    d: '広告費をかけて母集団を「買う」採用ではありません。ムダな媒体コストがない分、1名あたりの採用単価を抑えられます。',
   },
   {
-    t: '許可を受けた職業紹介',
-    d: '厚生労働大臣の許可を受けた有料職業紹介事業として運営しています。',
+    t: '紹介経由だから、辞めにくい',
+    d: '友人・知人の顔を立てて入社する人材です。ミスマッチや早期離職のリスクを抑え、定着につながります。',
+  },
+  {
+    t: '半端な人は、紹介しません',
+    d: '希望条件と意欲を確認したうえで、貴社に合う方だけをご紹介します。数合わせの推薦はしません。',
   },
 ]
 
@@ -356,13 +360,14 @@ function CompanyPage() {
           <em>紹介の力</em>で。
         </h1>
         <p className="chero__lead">
-          VILLE CAREERは、人から人への紹介でつながる有料職業紹介サービスです。
+          <strong className="chero__stress">完全成功報酬・初期費用0円。</strong>
+          採用が決まるまで、費用はかかりません。
           <br />
-          若手・未経験層の採用を、紹介ベースでご支援します。
+          紹介でつながった辞めにくい人材だけを、選んでご紹介します。
         </p>
         <a className="apply-btn apply-btn--big apply-btn--company" href={COMPANY_FORM_URL} target="_blank" rel="noopener">
           <span className="apply-btn__label">採用の相談をする</span>
-          <span className="apply-btn__sub">1営業日以内にご連絡します</span>
+          <span className="apply-btn__sub">完全成功報酬・相談は無料｜1営業日以内にご連絡します</span>
         </a>
         <p className="chero__license">{LICENSE}</p>
       </section>
@@ -370,7 +375,7 @@ function CompanyPage() {
       {/* ============ POINTS ============ */}
       <section className="section section--cpoints">
         <Reveal>
-          <h2 className="csection__title">VILLE CAREERの特徴</h2>
+          <h2 className="csection__title">企業様にとってのメリット</h2>
         </Reveal>
         <div className="cpoints">
           {COMPANY_POINTS.map((p, i) => (

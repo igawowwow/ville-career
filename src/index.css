@@ -1178,3 +1178,9 @@ summary:focus-visible {
     animation: none;
   }
 }
+
+/* 企業ヒーローの強調 */
+.chero__stress {
+  color: var(--sun);
+  font-weight: 700;
+}
