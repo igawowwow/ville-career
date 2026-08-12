@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 
-// 紹介を受けた方専用の応募フォームURL。運用開始時に差し替える。
-const APPLY_URL = '#apply'
+// 紹介を受けた方専用の応募フォーム(Googleフォーム)
+const APPLY_URL = 'https://docs.google.com/forms/d/1qmHhth7cMt5hQMBtw3VtwpdleOOuxmZ8vw1HUbbneyE/viewform'
 
 const BADGES = ['月収30万円以上', '年間休日120日以上', '正社員', '未経験OK']
 
