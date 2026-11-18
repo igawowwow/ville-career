@@ -628,7 +628,7 @@ function JobPage({ job }: { job: Job }) {
                     </div>
                   ))}
                 </dl>
-                <p className="jnote">ヴィレキャリアは紹介制の求人サイトです。会社名は、担当とのLINE面談でお伝えしています。</p>
+                {!job.showName && <p className="jnote">ヴィレキャリアは紹介制の求人サイトです。会社名は、担当とのLINE面談でお伝えしています。</p>}
               </section>
 
               <section className="jblock">
