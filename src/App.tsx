@@ -287,23 +287,33 @@ function SeekerPage() {
         <section className="section" id="jobs">
           <Reveal>
             <h2 className="section__title">
-              <span className="section__title-mark">📌</span>
               いま紹介できる求人
             </h2>
           </Reveal>
           <div className="jobs">
             {JOBS.map((j, i) => (
               <Reveal key={j.id} delay={i * 90}>
-                <a className="job-card" href={`#job/${j.id}`}>
-                  <p className="job-card__catch">{j.catch}</p>
-                  <h3 className="job-card__title">{j.title}</h3>
-                  <p className="job-card__salary">{j.salary}</p>
-                  <ul className="job-card__tags">
-                    {j.tags.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                  <span className="job-card__more">くわしく見る →</span>
+                <a className="jcard" href={`#job/${j.id}`}>
+                  <img className="jcard__img" src={j.hero.src} alt={j.hero.alt} loading="lazy" />
+                  <div className="jcard__body">
+                    <p className="jcard__company">{j.company}</p>
+                    <h3 className="jcard__title">{j.headline}</h3>
+                    <JobTags job={j} />
+                    <dl className="jcard__facts">
+                      <div>
+                        <dt>給与</dt>
+                        <dd>{j.salary}</dd>
+                      </div>
+                      <div>
+                        <dt>勤務地</dt>
+                        <dd>{j.area}</dd>
+                      </div>
+                    </dl>
+                    <span className="jcard__more">
+                      詳細を見る
+                      <Icon name="arrow" />
+                    </span>
+                  </div>
                 </a>
               </Reveal>
             ))}
@@ -387,117 +397,275 @@ function SeekerPage() {
   )
 }
 
+function Icon({ name }: { name: 'check' | 'heart' | 'yen' | 'pin' | 'clock' | 'arrow' }) {
+  const d = {
+    check: 'M9 12.5l2 2 4-4.5M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z',
+    heart: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',
+    yen: 'M7 4l5 7 5-7M12 11v9M8 13h8M8 16.5h8',
+    pin: 'M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+    clock: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM12 7v5l3 2',
+    arrow: 'M9 6l6 6-6 6',
+  }[name]
+  return (
+    <svg className="jicon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} />
+    </svg>
+  )
+}
+
+function JobTags({ job }: { job: Job }) {
+  return (
+    <ul className="jtags">
+      {job.isNew && <li className="jtags__new">New</li>}
+      {job.tags.map((t, i) => (
+        <li key={t} className={i === 0 ? 'jtags__main' : undefined}>
+          {t}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function useSaved(id: string) {
+  const key = `vc-saved-${id}`
+  const [saved, setSaved] = useState(() => {
+    try {
+      return localStorage.getItem(key) === '1'
+    } catch {
+      return false
+    }
+  })
+  const toggle = () => {
+    setSaved((v) => {
+      try {
+        if (v) localStorage.removeItem(key)
+        else localStorage.setItem(key, '1')
+      } catch {
+        /* 保存できなくても表示だけ切り替える */
+      }
+      return !v
+    })
+  }
+  return [saved, toggle] as const
+}
+
+function JobActions({ saved, onSave }: { saved: boolean; onSave: () => void }) {
+  return (
+    <div className="jact">
+      <a className="jact__apply" href={APPLY_FORM_URL} target="_blank" rel="noopener">
+        応募する
+      </a>
+      <button type="button" className={`jact__save ${saved ? 'is-on' : ''}`} onClick={onSave} aria-pressed={saved}>
+        <Icon name="heart" />
+        {saved ? '保存済み' : '気になる'}
+      </button>
+    </div>
+  )
+}
+
 function JobPage({ job }: { job: Job }) {
+  const [tab, setTab] = useState<'pickup' | 'detail'>('pickup')
+  const [saved, toggleSaved] = useSaved(job.id)
+  const tabsRef = useRef<HTMLDivElement>(null)
+
+  const go = (t: 'pickup' | 'detail') => {
+    setTab(t)
+    const el = tabsRef.current
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 64, behavior: 'smooth' })
+  }
+
   return (
     <>
-      <main id="top" className="jobpage">
-        <section className="jhero">
-          <p className="hero__kicker">📌 ヴィレキャリアの紹介求人</p>
-          <h1 className="jhero__catch">{job.catch}</h1>
-          <p className="jhero__title">{job.title}</p>
-          <ul className="job-card__tags jhero__tags">
-            {job.tags.map((t) => (
-              <li key={t}>{t}</li>
+      <main id="top" className="jp">
+        <nav className="jp__crumb" aria-label="パンくずリスト">
+          <a href="#top" onClick={() => (window.location.hash = '')}>ヴィレキャリア トップ</a>
+          <span>›</span>
+          <a href="#jobs">求人一覧</a>
+          <span>›</span>
+          <span>{job.title}</span>
+        </nav>
+
+        <header className="jp__head">
+          <p className="jp__dates">
+            掲載開始日：{job.posted}　更新日：{job.updated}
+          </p>
+          <p className="jp__company">{job.company}</p>
+          <h1 className="jp__title">{job.headline}</h1>
+          <JobTags job={job} />
+          <dl className="jp__facts">
+            <div>
+              <dt>
+                <Icon name="yen" />
+                給与
+              </dt>
+              <dd>
+                <strong>{job.salary}</strong>
+                <span>{job.salaryNote}</span>
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <Icon name="pin" />
+                勤務地
+              </dt>
+              <dd>{job.area}</dd>
+            </div>
+          </dl>
+        </header>
+
+        <section className="jsum" aria-label="この求人を要約すると">
+          <p className="jsum__label">この求人を要約すると…</p>
+          <ul className="jsum__list">
+            {job.summary.map((s) => (
+              <li key={s}>
+                <Icon name="check" />
+                {s}
+              </li>
             ))}
           </ul>
-          <div className="jhero__salary">
-            <span className="jhero__salary-label">給与</span>
-            <strong>{job.salary}</strong>
-            <span className="jhero__salary-note">{job.salaryNote}</span>
-          </div>
-          <p className="jhero__lead">{job.lead}</p>
-          <ApplyButton big label="この求人に応募する" />
         </section>
 
-        <div className="band band--white">
-          <Wave tone="white" />
-          <section className="section">
-            <Reveal>
-              <h2 className="section__title">
-                <span className="section__title-mark">✨</span>
-                この仕事のいいところ
-              </h2>
-            </Reveal>
-            <div className="promise">
-              {job.points.map((c, i) => (
-                <Reveal key={c.t} delay={i * 90} className="promise__card">
-                  <span className="promise__emoji" aria-hidden="true">
-                    {c.e}
-                  </span>
-                  <h3 className="promise__title">{c.t}</h3>
-                  <p className="promise__desc">{c.d}</p>
-                </Reveal>
-              ))}
+        <div className="jp__body">
+          <div className="jtabs" ref={tabsRef} role="tablist">
+            <button type="button" role="tab" aria-selected={tab === 'pickup'} className={tab === 'pickup' ? 'is-on' : ''} onClick={() => go('pickup')}>
+              Pick up!
+            </button>
+            <button type="button" role="tab" aria-selected={tab === 'detail'} className={tab === 'detail' ? 'is-on' : ''} onClick={() => go('detail')}>
+              求人詳細
+            </button>
+            <div className="jtabs__act">
+              <JobActions saved={saved} onSave={toggleSaved} />
             </div>
-          </section>
-          <Wave tone="paper" />
-        </div>
+          </div>
 
-        <section className="section">
-          <Reveal>
-            <h2 className="section__title">
-              <span className="section__title-mark">🕗</span>
-              ある1日の流れ
-            </h2>
-          </Reveal>
-          <ol className="jday">
-            {job.day.map((d, i) => (
-              <Reveal key={d.time} delay={i * 60}>
-                <li className="jday__item">
-                  <span className="jday__time">{d.time}</span>
-                  <span>{d.t}</span>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
-          <p className="jvoice">{job.voice}</p>
-        </section>
+          {tab === 'pickup' ? (
+            <div className="jpanel" role="tabpanel">
+              <figure className="jkv">
+                <img src={job.hero.src} alt={job.hero.alt} loading="eager" />
+                <figcaption>
+                  <span className="jkv__catch">{job.catch}</span>
+                </figcaption>
+              </figure>
+              <p className="jpanel__lead">{job.lead}</p>
 
-        <div className="band band--white">
-          <Wave tone="white" />
-          <section className="section">
-            <Reveal>
-              <h2 className="section__title">
-                <span className="section__title-mark">📝</span>
-                募集要項
-              </h2>
-            </Reveal>
-            <dl className="jterms">
-              {job.terms.map(([k, v]) => (
-                <div key={k} className="jterms__row">
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
-                </div>
+              <ul className="jgal">
+                {job.gallery.map((g) => (
+                  <li key={g.src}>
+                    <img src={g.src} alt={g.alt} loading="lazy" />
+                    <span>{g.cap}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {job.topics.map((t, i) => (
+                <section key={t.t} className={`jtopic ${i % 2 ? 'jtopic--rev' : ''}`}>
+                  <img src={t.img} alt="" loading="lazy" />
+                  <div>
+                    <p className="jtopic__label">{t.label}</p>
+                    <h2 className="jtopic__title">{t.t}</h2>
+                    <p className="jtopic__desc">{t.d}</p>
+                  </div>
+                </section>
               ))}
-            </dl>
-          </section>
-          <Wave tone="paper" />
-        </div>
 
-        <section className="section section--closing">
-          <Reveal>
-            <h2 className="closing__title">
-              気になったら、
-              <br />
-              <em>30秒</em>で応募しよう。
-            </h2>
-          </Reveal>
-          <Reveal delay={120} className="section__cta">
-            <ApplyButton big label="この求人に応募する" />
-          </Reveal>
-          <Reveal delay={200}>
-            <p className="closing__note">応募フォームの「紹介者の名前」に、この求人を教えてくれた人の名前を書いてください。担当からLINEでご連絡します。</p>
-          </Reveal>
+              <section className="jblock">
+                <h2 className="jblock__title">
+                  <Icon name="clock" />
+                  ある1日の流れ
+                </h2>
+                <ol className="jday">
+                  {job.day.map((d) => (
+                    <li key={d.time} className="jday__item">
+                      <span className="jday__time">{d.time}</span>
+                      <span>{d.t}</span>
+                    </li>
+                  ))}
+                </ol>
+                <p className="jvoice">{job.voice}</p>
+              </section>
+
+              <button type="button" className="jmore" onClick={() => go('detail')}>
+                募集要項・会社情報を見る
+                <Icon name="arrow" />
+              </button>
+            </div>
+          ) : (
+            <div className="jpanel" role="tabpanel">
+              <section className="jblock">
+                <h2 className="jblock__title jblock__title--line">募集要項</h2>
+                <dl className="jtable">
+                  {job.terms.map((r) => (
+                    <div key={r.k} className="jtable__row">
+                      <dt>{r.k}</dt>
+                      <dd>
+                        {r.lead && <p className="jtable__lead">{r.lead}</p>}
+                        <p className="jtable__body">{r.body}</p>
+                        {r.sub?.map((s) => (
+                          <div key={s.h} className="jtable__sub">
+                            <p className="jtable__subh">{s.h}</p>
+                            <ul>
+                              {s.items.map((it) => (
+                                <li key={it}>{it}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+
+              <section className="jblock">
+                <h2 className="jblock__title jblock__title--line">企業情報</h2>
+                <dl className="jtable">
+                  {job.companyInfo.map(([k, v]) => (
+                    <div key={k} className="jtable__row">
+                      <dt>{k}</dt>
+                      <dd>
+                        <p className="jtable__body">{v}</p>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="jnote">ヴィレキャリアは紹介制の求人サイトです。会社名は、担当とのLINE面談でお伝えしています。</p>
+              </section>
+
+              <section className="jblock">
+                <h2 className="jblock__title jblock__title--line">応募方法・選考の流れ</h2>
+                <ol className="jflow">
+                  {job.flow.map((f, i) => (
+                    <li key={f.t}>
+                      <span className="jflow__n">STEP{i + 1}</span>
+                      <strong>{f.t}</strong>
+                      <span className="jflow__d">{f.d}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </div>
+          )}
+
+          <div className="jcta">
+            <p className="jcta__t">この求人に興味をもったら</p>
+            <JobActions saved={saved} onSave={toggleSaved} />
+            <p className="jcta__n">応募フォームは入力3つだけ。「紹介者の名前」に、この求人を教えてくれた人の名前を書いてください。担当からLINEでご連絡します。利用料は0円です。</p>
+          </div>
+
           <p className="jback">
-            <a href="#jobs">← ほかの求人・ヴィレキャリアについて</a>
+            <a href="#jobs">← ほかの求人を見る</a>
           </p>
-        </section>
+        </div>
       </main>
 
-      <div className="sticky-cta">
-        <a href={APPLY_FORM_URL} target="_blank" rel="noopener">
-          🚀 この求人に応募する（無料）
-        </a>
+      <div className="jbar">
+        <div className="jbar__in">
+          <div className="jbar__info">
+            <p className="jbar__title">{job.title}</p>
+            <p className="jbar__head">{job.headline}</p>
+          </div>
+          <JobActions saved={saved} onSave={toggleSaved} />
+        </div>
       </div>
     </>
   )
@@ -623,7 +791,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className={`site ${page.kind === 'company' ? 'site--company' : ''}`}>
+    <div className={`site ${page.kind === 'company' ? 'site--company' : page.kind === 'job' ? 'site--job' : ''}`}>
       <header className={`header ${scrolled ? 'header--solid' : ''}`}>
         <a className="header__logo" href="#top">
           VILLE<span>CAREER</span>

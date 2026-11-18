@@ -1203,204 +1203,833 @@ img.chat__who {
   color: var(--ink-dim);
 }
 
-/* ============ JOBS ============ */
+/* ============ JOBS（一覧カード） ============ */
 .jobs {
   margin-top: 30px;
   display: grid;
   gap: 16px;
 }
 
-.job-card {
-  display: block;
-  background: var(--white);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 0 var(--ink);
-  padding: 22px 20px;
-  color: inherit;
+.jcard {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  background: #fff;
+  border: 1px solid #d8e1ea;
+  border-radius: 8px;
+  overflow: hidden;
   text-decoration: none;
-  transition: translate 0.2s ease, box-shadow 0.2s ease;
+  color: #222;
+  font-family: var(--body);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
-.job-card:hover {
-  translate: 0 -4px;
-  box-shadow: 0 8px 0 var(--ink);
+.jcard:hover {
+  border-color: #1a73c9;
+  box-shadow: 0 4px 16px rgba(20, 70, 120, 0.12);
 }
 
-.job-card__catch {
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: clamp(19px, 3.6vw, 24px);
-  line-height: 1.4;
+.jcard__img {
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  object-fit: cover;
+  display: block;
 }
 
-.job-card__title {
-  margin-top: 6px;
-  font-size: 14px;
-  color: var(--ink-dim);
-  font-weight: 700;
-}
-
-.job-card__salary {
-  margin-top: 12px;
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: 20px;
-  color: var(--coral-deep);
-}
-
-.job-card__tags {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  list-style: none;
-  padding: 0;
-}
-
-.job-card__tags li {
-  background: var(--sun-soft);
-  border: 1.5px solid var(--ink);
-  border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 12.5px;
-  font-weight: 700;
-}
-
-.job-card__more {
-  display: inline-block;
-  margin-top: 14px;
-  font-weight: 700;
-  color: var(--sky-deep);
-}
-
-.jhero {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 110px clamp(20px, 5vw, 40px) 50px;
-  text-align: center;
-}
-
-.jhero__catch {
-  margin-top: 14px;
-  font-family: var(--display);
-  font-weight: 900;
-  font-size: clamp(30px, 7vw, 50px);
-  line-height: 1.3;
-}
-
-.jhero__title {
-  margin-top: 10px;
-  font-weight: 700;
-  color: var(--ink-dim);
-}
-
-.jhero__tags {
-  justify-content: center;
-}
-
-.jhero__salary {
-  margin: 24px auto 0;
-  max-width: 460px;
-  background: var(--white);
-  border: 2px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 0 var(--ink);
+.jcard__body {
   padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jcard__company {
+  font-size: 13px;
+  color: #555;
+}
+
+.jcard__title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #1a5fa8;
+}
+
+.jcard:hover .jcard__title {
+  text-decoration: underline;
+}
+
+.jcard__facts {
+  font-size: 13px;
   display: grid;
   gap: 4px;
 }
 
-.jhero__salary-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-dim);
-}
-
-.jhero__salary strong {
-  font-family: var(--display);
-  font-size: clamp(24px, 5vw, 32px);
-  color: var(--coral-deep);
-}
-
-.jhero__salary-note {
-  font-size: 13px;
-  color: var(--ink-dim);
-}
-
-.jhero__lead {
-  margin: 24px auto 28px;
-  max-width: 600px;
-  font-size: clamp(15px, 2.3vw, 17px);
-  text-align: left;
-}
-
-.jday {
-  margin: 28px auto 0;
-  max-width: 520px;
-  list-style: none;
-  padding: 0;
-  border-left: 3px solid var(--sun-deep);
-}
-
-.jday__item {
-  display: flex;
-  gap: 14px;
-  padding: 10px 0 10px 16px;
-}
-
-.jday__time {
-  flex: none;
-  width: 52px;
-  font-family: var(--display);
-  font-weight: 900;
-  color: var(--sky-deep);
-}
-
-.jvoice {
-  margin: 30px auto 0;
-  max-width: 560px;
-  background: var(--sun-soft);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  font-weight: 700;
-}
-
-.jterms {
-  margin-top: 28px;
-  border-top: 2px solid var(--ink);
-}
-
-.jterms__row {
+.jcard__facts div {
   display: grid;
-  grid-template-columns: 7.5em 1fr;
-  gap: 12px;
-  padding: 14px 4px;
-  border-bottom: 1px dashed var(--ink-dim);
-  font-size: 14.5px;
+  grid-template-columns: 4.5em 1fr;
 }
 
-.jterms__row dt {
+.jcard__facts dt {
+  color: #666;
+}
+
+.jcard__more {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
   font-weight: 700;
+  color: #1a73c9;
 }
 
-.jterms__row dd {
-  margin: 0;
-}
-
-@media (max-width: 480px) {
-  .jterms__row {
+@media (max-width: 720px) {
+  .jcard {
     grid-template-columns: 1fr;
-    gap: 4px;
+  }
+  .jcard__img {
+    height: 180px;
+    min-height: 0;
   }
 }
 
-.jback {
-  margin-top: 30px;
+/* ============ 求人詳細（JOB PAGE） ============ */
+.site--job {
+  background: #eef4fa;
+}
+
+.site--job .header {
+  background: #fff;
+  box-shadow: 0 1px 0 #d8e1ea;
+}
+
+.jicon {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+.jp {
+  font-family: var(--body);
+  color: #222;
+  line-height: 1.75;
+  padding-top: 64px;
+  padding-bottom: 110px;
+}
+
+.jp__crumb {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.jp__crumb a {
+  color: #1a73c9;
+  text-decoration: none;
+}
+
+.jp__crumb a:hover {
+  text-decoration: underline;
+}
+
+.jp__head {
+  background: #fff;
+  border-top: 1px solid #d8e1ea;
+  border-bottom: 1px solid #d8e1ea;
+  padding: 20px max(16px, calc((100% - 968px) / 2)) 22px;
+}
+
+.jp__dates {
+  font-size: 12px;
+  color: #777;
+  text-align: right;
+}
+
+.jp__company {
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.jp__title {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #333;
+}
+
+.jtags {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.jtags li {
+  font-size: 11px;
+  line-height: 1;
+  padding: 5px 7px;
+  border: 1px solid #1a73c9;
+  color: #1a73c9;
+  border-radius: 2px;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.jtags li.jtags__main {
+  background: #1a73c9;
+  color: #fff;
+}
+
+.jtags li.jtags__new {
+  background: #e60012;
+  border-color: #e60012;
+  color: #fff;
+  font-weight: 700;
+}
+
+.jp__facts {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.jp__facts div {
+  display: grid;
+  grid-template-columns: 6.5em 1fr;
+  gap: 8px;
+}
+
+.jp__facts dt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #555;
+  font-weight: 700;
+  align-self: start;
+  padding-top: 2px;
+}
+
+.jp__facts dd strong {
+  font-size: 18px;
+  color: #e60012;
+  margin-right: 8px;
+}
+
+.jp__facts dd span {
+  display: inline-block;
+  font-size: 12px;
+  color: #555;
+}
+
+/* 要約 */
+.jsum {
+  max-width: 940px;
+  margin: 24px auto 0;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border: 2px solid #1a8fe0;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.jsum__label {
+  background: #1a8fe0;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  padding: 14px;
   text-align: center;
 }
 
-.jback a {
-  color: var(--sky-deep);
+.jsum__list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 22px;
+}
+
+.jsum__list li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
   font-weight: 700;
+  font-size: 14px;
+  padding: 12px 0;
+  border-bottom: 1px dashed #d8e1ea;
+}
+
+.jsum__list li:last-child {
+  border-bottom: 0;
+}
+
+.jsum__list .jicon {
+  color: #1a8fe0;
+  margin-top: 3px;
+}
+
+/* 本文 */
+.jp__body {
+  max-width: 1000px;
+  margin: 28px auto 0;
+  background: #fff;
+  border: 1px solid #d8e1ea;
+}
+
+.jtabs {
+  position: sticky;
+  top: 56px;
+  z-index: 20;
+  display: flex;
+  align-items: stretch;
+  background: #f5f7f9;
+  border-bottom: 1px solid #d8e1ea;
+}
+
+.jtabs > button {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 18px 34px;
+  border: 0;
+  border-top: 3px solid transparent;
+  background: transparent;
+  color: #1a73c9;
+  cursor: pointer;
+}
+
+.jtabs > button.is-on {
+  background: #fff;
+  color: #222;
+  border-top-color: #1a73c9;
+  margin-bottom: -1px;
+}
+
+.jtabs__act {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.jact {
+  display: flex;
+  gap: 12px;
+}
+
+.jact__apply,
+.jact__save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 150px;
+  height: 42px;
+  border-radius: 4px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.jact__apply {
+  background: linear-gradient(90deg, #0e6fbf, #2a95e0);
+  color: #fff;
+  border: 0;
+  box-shadow: 0 2px 0 #0a5797;
+}
+
+.jact__apply:hover {
+  filter: brightness(1.08);
+}
+
+.jact__save {
+  background: #fff;
+  color: #1a73c9;
+  border: 1px solid #1a73c9;
+}
+
+.jact__save.is-on {
+  background: #fff0f3;
+  color: #d6336c;
+  border-color: #d6336c;
+}
+
+.jpanel {
+  padding: 32px 48px 8px;
+}
+
+.jkv {
+  position: relative;
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.jkv img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.jkv figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 60px 28px 22px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
+}
+
+.jkv__catch {
+  color: #fff;
+  font-size: clamp(22px, 3.6vw, 34px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.jpanel__lead {
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.jgal {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.jgal img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px;
+}
+
+.jgal span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #555;
+}
+
+.jtopic {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.jtopic img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.jtopic--rev img {
+  order: 2;
+}
+
+.jtopic__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #1a8fe0;
+}
+
+.jtopic__title {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.45;
+  display: inline;
+  background: linear-gradient(transparent 62%, #fff2a8 62%);
+}
+
+.jtopic__desc {
+  margin-top: 14px;
+  font-size: 15px;
+}
+
+.jblock {
+  margin-top: 44px;
+}
+
+.jblock__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.jblock__title--line {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.jblock .jday {
+  margin-top: 16px;
+}
+
+.jday {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 2px solid #1a8fe0;
+}
+
+.jday__item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 10px 0 10px 20px;
+  font-size: 15px;
+}
+
+.jday__item::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 18px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #1a8fe0;
+}
+
+.jday__time {
+  font-weight: 700;
+  color: #1a73c9;
+  min-width: 3.2em;
+}
+
+.jvoice {
+  margin-top: 18px;
+  padding: 16px 20px;
+  background: #f1f7fd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.jmore {
+  margin: 40px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: min(100%, 420px);
+  height: 50px;
+  font: inherit;
+  font-weight: 700;
+  color: #1a73c9;
+  background: #fff;
+  border: 1px solid #1a73c9;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.jmore:hover {
+  background: #f1f7fd;
+}
+
+/* 募集要項テーブル */
+.jtable {
+  margin: 0;
+}
+
+.jtable__row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e3e8ee;
+}
+
+.jtable__row dt {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.jtable__row dd {
+  margin: 0;
+  font-size: 14px;
+}
+
+.jtable__lead {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.jtable__body {
+  white-space: pre-line;
+}
+
+.jtable__sub {
+  margin-top: 12px;
+}
+
+.jtable__subh {
+  background: #e3f0fb;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 14px;
+  margin-bottom: 6px;
+}
+
+.jtable__sub ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.jtable__sub li::before {
+  content: '■';
+  margin-right: 2px;
+}
+
+.jnote {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+.jflow {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.jflow li {
+  position: relative;
+  background: #f1f7fd;
+  border-radius: 4px;
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.jflow__n {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a8fe0;
+  letter-spacing: 0.08em;
+}
+
+.jflow strong {
+  font-size: 15px;
+}
+
+.jflow__d {
+  font-size: 12px;
+  color: #555;
+}
+
+.jcta {
+  margin: 44px 48px 0;
+  padding: 28px 20px;
+  background: #f5f7f9;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.jcta__t {
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 14px;
+}
+
+.jcta .jact {
+  justify-content: center;
+}
+
+.jcta .jact__apply,
+.jcta .jact__save {
+  min-width: 200px;
+  height: 52px;
+  font-size: 16px;
+}
+
+.jcta__n {
+  margin: 14px auto 0;
+  max-width: 560px;
+  font-size: 12px;
+  color: #555;
+  text-align: left;
+}
+
+.jback {
+  padding: 24px 48px 32px;
+  font-size: 14px;
+}
+
+.jback a {
+  color: #1a73c9;
+}
+
+/* 下に固定のバー */
+.jbar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 60;
+  background: #fff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+
+.jbar__in {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.jbar__info {
+  min-width: 0;
+  flex: 1;
+  font-family: var(--body);
+}
+
+.jbar__title {
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jbar__head {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 720px) {
+  .jp {
+    padding-top: 58px;
+  }
+  .jp__company {
+    font-size: 18px;
+  }
+  .jsum {
+    margin: 16px 12px 0;
+    grid-template-columns: 1fr;
+  }
+  .jsum__label {
+    padding: 10px;
+  }
+  .jsum__list {
+    padding: 4px 14px;
+  }
+  .jp__body {
+    margin: 16px 0 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .jtabs {
+    top: 52px;
+  }
+  .jtabs > button {
+    flex: 1;
+    padding: 14px 8px;
+  }
+  .jtabs__act {
+    display: none;
+  }
+  .jpanel {
+    padding: 20px 16px 4px;
+  }
+  .jkv figcaption {
+    padding: 40px 16px 14px;
+  }
+  .jgal {
+    grid-template-columns: 1fr 1fr;
+  }
+  .jgal li:first-child {
+    grid-column: 1 / -1;
+  }
+  .jtopic,
+  .jtopic--rev {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .jtopic--rev img {
+    order: 0;
+  }
+  .jtopic__title {
+    font-size: 19px;
+  }
+  .jtable__row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 16px 0;
+  }
+  .jflow {
+    grid-template-columns: 1fr;
+  }
+  .jflow li {
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    text-align: left;
+    gap: 8px;
+  }
+  .jcta {
+    margin: 32px 16px 0;
+  }
+  .jcta .jact {
+    flex-direction: column;
+  }
+  .jcta .jact__apply,
+  .jcta .jact__save {
+    width: 100%;
+  }
+  .jback {
+    padding: 20px 16px 28px;
+  }
+  .jbar__info {
+    display: none;
+  }
+  .jbar .jact {
+    width: 100%;
+  }
+  .jbar .jact__apply {
+    flex: 2;
+    min-width: 0;
+  }
+  .jbar .jact__save {
+    flex: 1;
+    min-width: 0;
+  }
 }
