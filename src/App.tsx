@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { JOBS, type Job } from './jobs'
 
 // 応募フォーム(Googleフォーム)。送信されると career@ville-ville.com に通知が届く
 const APPLY_FORM_URL = 'https://forms.gle/Hk1X5Zn9UFhW5W768'
@@ -281,6 +282,34 @@ function SeekerPage() {
           </Reveal>
         </section>
 
+
+        {/* ============ JOBS ============ */}
+        <section className="section" id="jobs">
+          <Reveal>
+            <h2 className="section__title">
+              <span className="section__title-mark">📌</span>
+              いま紹介できる求人
+            </h2>
+          </Reveal>
+          <div className="jobs">
+            {JOBS.map((j, i) => (
+              <Reveal key={j.id} delay={i * 90}>
+                <a className="job-card" href={`#job/${j.id}`}>
+                  <p className="job-card__catch">{j.catch}</p>
+                  <h3 className="job-card__title">{j.title}</h3>
+                  <p className="job-card__salary">{j.salary}</p>
+                  <ul className="job-card__tags">
+                    {j.tags.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                  <span className="job-card__more">くわしく見る →</span>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
         {/* ============ PROMISE ============ */}
         <section className="section">
           <Reveal>
@@ -352,6 +381,122 @@ function SeekerPage() {
       <div className="sticky-cta">
         <a href={APPLY_FORM_URL} target="_blank" rel="noopener">
           🚀 30秒でカンタン応募（無料）
+        </a>
+      </div>
+    </>
+  )
+}
+
+function JobPage({ job }: { job: Job }) {
+  return (
+    <>
+      <main id="top" className="jobpage">
+        <section className="jhero">
+          <p className="hero__kicker">📌 ヴィレキャリアの紹介求人</p>
+          <h1 className="jhero__catch">{job.catch}</h1>
+          <p className="jhero__title">{job.title}</p>
+          <ul className="job-card__tags jhero__tags">
+            {job.tags.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+          <div className="jhero__salary">
+            <span className="jhero__salary-label">給与</span>
+            <strong>{job.salary}</strong>
+            <span className="jhero__salary-note">{job.salaryNote}</span>
+          </div>
+          <p className="jhero__lead">{job.lead}</p>
+          <ApplyButton big label="この求人に応募する" />
+        </section>
+
+        <div className="band band--white">
+          <Wave tone="white" />
+          <section className="section">
+            <Reveal>
+              <h2 className="section__title">
+                <span className="section__title-mark">✨</span>
+                この仕事のいいところ
+              </h2>
+            </Reveal>
+            <div className="promise">
+              {job.points.map((c, i) => (
+                <Reveal key={c.t} delay={i * 90} className="promise__card">
+                  <span className="promise__emoji" aria-hidden="true">
+                    {c.e}
+                  </span>
+                  <h3 className="promise__title">{c.t}</h3>
+                  <p className="promise__desc">{c.d}</p>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+          <Wave tone="paper" />
+        </div>
+
+        <section className="section">
+          <Reveal>
+            <h2 className="section__title">
+              <span className="section__title-mark">🕗</span>
+              ある1日の流れ
+            </h2>
+          </Reveal>
+          <ol className="jday">
+            {job.day.map((d, i) => (
+              <Reveal key={d.time} delay={i * 60}>
+                <li className="jday__item">
+                  <span className="jday__time">{d.time}</span>
+                  <span>{d.t}</span>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+          <p className="jvoice">{job.voice}</p>
+        </section>
+
+        <div className="band band--white">
+          <Wave tone="white" />
+          <section className="section">
+            <Reveal>
+              <h2 className="section__title">
+                <span className="section__title-mark">📝</span>
+                募集要項
+              </h2>
+            </Reveal>
+            <dl className="jterms">
+              {job.terms.map(([k, v]) => (
+                <div key={k} className="jterms__row">
+                  <dt>{k}</dt>
+                  <dd>{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+          <Wave tone="paper" />
+        </div>
+
+        <section className="section section--closing">
+          <Reveal>
+            <h2 className="closing__title">
+              気になったら、
+              <br />
+              <em>30秒</em>で応募しよう。
+            </h2>
+          </Reveal>
+          <Reveal delay={120} className="section__cta">
+            <ApplyButton big label="この求人に応募する" />
+          </Reveal>
+          <Reveal delay={200}>
+            <p className="closing__note">応募フォームの「紹介者の名前」に、この求人を教えてくれた人の名前を書いてください。担当からLINEでご連絡します。</p>
+          </Reveal>
+          <p className="jback">
+            <a href="#jobs">← ほかの求人・ヴィレキャリアについて</a>
+          </p>
+        </section>
+      </main>
+
+      <div className="sticky-cta">
+        <a href={APPLY_FORM_URL} target="_blank" rel="noopener">
+          🚀 この求人に応募する（無料）
         </a>
       </div>
     </>
@@ -441,17 +586,30 @@ function CompanyPage() {
   )
 }
 
+type Page = { kind: 'seeker' } | { kind: 'company' } | { kind: 'job'; job: Job }
+
+function pageFromHash(): Page {
+  const h = window.location.hash
+  if (h.startsWith('#company')) return { kind: 'company' }
+  const m = h.match(/^#job\/([\w-]+)/)
+  const job = m && JOBS.find((j) => j.id === m[1])
+  if (job) return { kind: 'job', job }
+  return { kind: 'seeker' }
+}
+
 export default function App() {
-  const [page, setPage] = useState<'seeker' | 'company'>(() =>
-    window.location.hash.startsWith('#company') ? 'company' : 'seeker',
-  )
+  const [page, setPage] = useState<Page>(pageFromHash)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const onHash = () => {
-      const next = window.location.hash.startsWith('#company') ? 'company' : 'seeker'
+      const next = pageFromHash()
       setPage(next)
-      window.scrollTo({ top: 0 })
+      if (window.location.hash === '#jobs') {
+        requestAnimationFrame(() => document.getElementById('jobs')?.scrollIntoView())
+      } else {
+        window.scrollTo({ top: 0 })
+      }
     }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
@@ -465,23 +623,23 @@ export default function App() {
   }, [])
 
   return (
-    <div className={`site ${page === 'company' ? 'site--company' : ''}`}>
+    <div className={`site ${page.kind === 'company' ? 'site--company' : ''}`}>
       <header className={`header ${scrolled ? 'header--solid' : ''}`}>
-        <a className="header__logo" href="#top" onClick={() => setPage('seeker')}>
+        <a className="header__logo" href="#top">
           VILLE<span>CAREER</span>
         </a>
-        {page === 'seeker' ? (
-          <a className="header__link" href="#company">
-            企業様はこちら
-          </a>
-        ) : (
+        {page.kind === 'company' ? (
           <a className="header__link" href="#top">
             求職者の方はこちら
+          </a>
+        ) : (
+          <a className="header__link" href="#company">
+            企業様はこちら
           </a>
         )}
       </header>
 
-      {page === 'seeker' ? <SeekerPage /> : <CompanyPage />}
+      {page.kind === 'company' ? <CompanyPage /> : page.kind === 'job' ? <JobPage job={page.job} /> : <SeekerPage />}
 
       <Footer />
     </div>
