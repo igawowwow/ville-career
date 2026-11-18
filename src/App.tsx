@@ -756,8 +756,12 @@ function CompanyPage() {
 
 type Page = { kind: 'seeker' } | { kind: 'company' } | { kind: 'job'; job: Job }
 
+const MOVED: Record<string, string> = { 'ville-ai-intern': 'https://recruit.ville-ville.com/jobs/ai-intern-osaka/' }
+
 function pageFromHash(): Page {
   const h = window.location.hash
+  const mv = h.match(/^#job\/([\w-]+)/)
+  if (mv && MOVED[mv[1]]) window.location.replace(MOVED[mv[1]])
   if (h.startsWith('#company')) return { kind: 'company' }
   const m = h.match(/^#job\/([\w-]+)/)
   const job = m && JOBS.find((j) => j.id === m[1])
